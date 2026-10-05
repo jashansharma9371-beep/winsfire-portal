@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex,nofollow">
+<title>WinsFire Order Portal</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+<script>try{var t=JSON.parse(localStorage.getItem("wf_theme"));if(!t&&matchMedia("(prefers-color-scheme: dark)").matches)t="dark";document.documentElement.dataset.theme=t||"light"}catch(e){}</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--fire:#C93C08;--fire2:#D4450C;--coal:#141210;--cream:#FBF6F1;--line:#eadfd5}
+*{-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;color:var(--coal);min-height:100vh;
+  background:radial-gradient(1100px 480px at 92% -8%,#ffe0cb 0,transparent 60%),radial-gradient(900px 480px at -8% 8%,#fff0e3 0,transparent 55%),var(--cream)}
+.display{font-family:'Bricolage Grotesque','DM Sans',sans-serif;letter-spacing:-.03em}
+.hdr{background:rgba(20,18,16,.92);backdrop-filter:blur(12px);border-bottom:1px solid #ffffff14}
+.subnav{background:#1e1a17;color:#ffffffcc;border-bottom:1px solid #ffffff10}.subnav a{transition:color .15s}.subnav a:hover{color:#fff}
+.srch{transition:box-shadow .2s}.srch:focus-within{box-shadow:0 0 0 4px #ff5a1f55}
+.btn{background:linear-gradient(135deg,var(--fire),var(--fire2));color:#fff;font-weight:700;border-radius:.8rem;padding:.6rem 1.1rem;box-shadow:0 8px 18px -8px #ff5a1fbb;transition:transform .15s,box-shadow .15s,filter .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px -10px #ff5a1fdd;filter:saturate(1.1)}.btn:active{transform:none}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn2{background:#fff;border:1px solid var(--line);font-weight:700;border-radius:.8rem;padding:.45rem .9rem;transition:background .15s,border-color .15s}.btn2:hover{background:#fff6ee;border-color:#f3c9aa}
+.inp{width:100%;border:1px solid var(--line);border-radius:.8rem;padding:.6rem .8rem;background:#fff;transition:border-color .15s,box-shadow .15s}
+.inp:focus{outline:none;border-color:var(--fire);box-shadow:0 0 0 4px #ff5a1f22}
+.card{background:#fff;border-radius:1.15rem;border:1px solid #f0e6dc;box-shadow:0 1px 2px #1412100a,0 10px 28px -16px #14121040}
+.pcard{transition:transform .2s,box-shadow .2s}.pcard:hover{transform:translateY(-4px);box-shadow:0 20px 38px -20px #ff5a1f77}
+.pcard img{transition:transform .5s ease}.pcard:hover img{transform:scale(1.07)}
+@media(min-width:768px){.side{position:sticky;top:7.5rem}}
+.side b{display:block;margin:1rem 0 .4rem;font-size:.78rem;color:#7a6a5f}
+.side button{display:block;width:100%;text-align:left;padding:.42rem .7rem;border-radius:.65rem;font-size:.9rem;transition:background .15s}
+.side button:hover{background:#fff1e6}.side button.on{background:linear-gradient(135deg,#141210,#40302a);color:#fff;font-weight:700}
+.tab{padding:.45rem 1.05rem;border-radius:999px;border:1px solid var(--line);font-weight:700;font-size:.85rem;background:#fff;transition:background .15s}
+.tab:hover{background:#fff1e6}.tab[aria-selected=true]{background:var(--coal);color:#fff;border-color:var(--coal)}
+.pill{display:inline-block;padding:.12rem .6rem;border-radius:999px;font-size:.72rem;font-weight:700}
+.pill-green{background:#e3f6e8;color:#14703a}.pill-amber{background:#fff0d6;color:#a8530c}.pill-red{background:#fde2e2;color:#b42318}
+.hero2{position:relative;overflow:hidden;border-radius:1.8rem;color:#fff;padding:2.2rem 1.5rem;background:radial-gradient(120% 150% at 100% 100%,#FF5A1F 0,#b8350f 30%,#141210 72%)}
+.hero2:after{content:"🔥";position:absolute;right:1.2rem;bottom:-1.2rem;font-size:8rem;opacity:.2;transform:rotate(-8deg);pointer-events:none}
+@media(min-width:768px){.hero2{padding:4rem 3.2rem}}
+.tile{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;aspect-ratio:16/10;border-radius:1.1rem;padding:1rem;color:#fff;text-align:left;background-size:cover;background-position:center;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.tile:hover{transform:translateY(-3px);box-shadow:0 16px 32px -16px #0008}
+.qv{position:absolute;left:.6rem;right:.6rem;bottom:.6rem;text-align:center;background:#141210e6;color:#fff;font-size:.75rem;font-weight:700;padding:.4rem;border-radius:.6rem;opacity:0;transform:translateY(6px);transition:.2s;pointer-events:none}
+@media(hover:hover){.pcard:hover .qv{opacity:1;transform:none}}@media(hover:none){.qv{display:none}}
+.mbar{position:sticky;bottom:0;margin:.5rem -1.25rem 0;padding:.75rem 1.25rem;background:#fff;border-top:1px solid #f0e6dc}
+[data-theme=dark] .mbar{background:#1d1916;border-color:#2c2621}
+#bnav{padding-bottom:env(safe-area-inset-bottom)}
+.chip2{background:#ffffff1f;border:1px solid #ffffff30;border-radius:999px;padding:.22rem .75rem;font-size:.75rem;backdrop-filter:blur(4px)}
+.auth-art{background:radial-gradient(110% 90% at 85% 112%,#FF5A1F 0,#a8280a 32%,#141210 68%);color:#fff}
+.flame{animation:flick 2.4s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes flick{0%,100%{transform:scale(1) rotate(-1deg)}50%{transform:scale(1.04,1.08) rotate(1.5deg)}}
+.skl{background:linear-gradient(90deg,#eadfd5 25%,#f6efe9 37%,#eadfd5 63%);background-size:400% 100%;animation:sh 1.3s infinite}
+@keyframes sh{0%{background-position:100% 0}100%{background-position:0 0}}
+#view>*{animation:rise .35s ease both}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#overlay,#pModal,#locModal{backdrop-filter:blur(4px)}
+#drawer{transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:-20px 0 50px -20px #0006}
+.toast{animation:tin .25s ease-out;box-shadow:0 10px 30px -10px #0008}@keyframes tin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #FF9A3C;outline-offset:2px}
+.text-black\/50{color:#665d55}.text-black\/60{color:#5a524b}.text-black\/70{color:#4a423c}.text-black\/25{color:#9a9089}
+.text-\[\#E04A12\]{color:#B93506}.text-\[\#FF9A3C\]{color:#D97706}.bg-\[\#FF5A1F\],.\!bg-\[\#FF5A1F\]{background:#C93C08!important}
+[data-inc],[data-dec],[data-mq],[data-fav]{min-width:2.25rem;min-height:2.25rem}
+.skip{position:absolute;left:-999px;top:.5rem;background:#fff;color:#141210;padding:.5rem 1rem;border-radius:.6rem;z-index:100;font-weight:700}.skip:focus{left:.5rem}
+.legal h2{font-size:1.5rem;margin-bottom:.2rem}.legal h3{font-weight:700;margin-top:1rem}.legal ul{list-style:disc;padding-left:1.2rem}.legal p,.legal li{line-height:1.55;margin-top:.3rem}
+@media print{body *{visibility:hidden}.printing,.printing *{visibility:visible}.printing{position:absolute;left:0;top:0;width:100%}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* ---- dark mode ---- */
+html[data-theme=dark]{color-scheme:dark}
+[data-theme=dark] body{color:#f3ece6;background:radial-gradient(1100px 480px at 92% -8%,#3b1c0f 0,transparent 60%),radial-gradient(900px 480px at -8% 8%,#2a1710 0,transparent 55%),#12100e}
+[data-theme=dark] .card,[data-theme=dark] .bg-white{background:#1d1916}
+[data-theme=dark] .card{border-color:#2c2621;box-shadow:0 10px 28px -16px #000c}
+[data-theme=dark] .inp{background:#26211d;border-color:#3a322c;color:#f3ece6}
+[data-theme=dark] .btn2,[data-theme=dark] .tab{background:#26211d;border-color:#3a322c;color:#f3ece6}
+[data-theme=dark] .btn2:hover,[data-theme=dark] .tab:hover{background:#322b25;border-color:#4a3f37}
+[data-theme=dark] .tab[aria-selected=true]{background:#FF5A1F;border-color:#FF5A1F;color:#fff}
+[data-theme=dark] .side button:hover{background:#2c2621}[data-theme=dark] .side button.on{background:#FF5A1F}[data-theme=dark] .side b{color:#a8978a}
+[data-theme=dark] .text-black\/50,[data-theme=dark] .text-black\/60,[data-theme=dark] .text-black\/70{color:#a8978a}
+[data-theme=dark] .bg-white\/80{background:#1d1916cc}
+[data-theme=dark] .bg-\[\#FFE3D1\]{background:#33231a}[data-theme=dark] .bg-\[\#FFF4EA\]{background:#2e211a}
+[data-theme=dark] .border,[data-theme=dark] .border-t,[data-theme=dark] .border-b{border-color:#2c2621}
+[data-theme=dark] .pill-green{background:#143a22;color:#7be0a0}[data-theme=dark] .pill-amber{background:#3d2a10;color:#ffc27a}[data-theme=dark] .pill-red{background:#40191a;color:#ff9b9b}
+[data-theme=dark] .bg-amber-100{background:#3d2a10}[data-theme=dark] .text-amber-800{color:#ffc27a}
+[data-theme=dark] .bg-blue-100{background:#14283d}[data-theme=dark] .text-blue-800{color:#8cc4ff}
+[data-theme=dark] .bg-green-100{background:#143a22}[data-theme=dark] .text-green-800{color:#7be0a0}
+[data-theme=dark] .bg-red-100{background:#40191a}[data-theme=dark] .text-red-800{color:#ff9b9b}
+[data-theme=dark] .bg-gray-200{background:#322b25}[data-theme=dark] .text-gray-700{color:#cbbdb2}
+[data-theme=dark] .skl{background:linear-gradient(90deg,#26211d 25%,#322b25 37%,#26211d 63%);background-size:400% 100%}
+[data-theme=dark] .srch{background:#26211d!important;color:#f3ece6}[data-theme=dark] .srch input{background:transparent;color:#f3ece6}[data-theme=dark] .srch select{background:#322b25;color:#f3ece6}
+[data-theme=dark] .btn2.text-\[\#E04A12\],[data-theme=dark] .text-\[\#E04A12\]{color:#ff8a5c}
+@media print{html[data-theme=dark] body{background:#fff;color:#000}html[data-theme=dark] .card{background:#fff}}
+</style>
+</head>
+<body>
+
+<!-- Sign in / sign up -->
+<section id="auth" class="min-h-screen grid md:grid-cols-2 hidden">
+  <div class="auth-art hidden md:flex flex-col justify-between p-10">
+    <div class="display font-extrabold text-2xl">🔥 WinsFire</div>
+    <div><svg class="flame" width="110" height="136" viewBox="0 0 24 30" fill="none"><path d="M12 1c1.2 4.2 6.5 6.8 6.5 12.5a6.5 6.5 0 0 1-13 0c0-2.6 1.3-4 2.6-5.2 0 2.4 1.2 3.8 2.6 3.8C10.5 7.7 9.8 5 12 1Z" fill="#FF5A1F"/><path d="M12 29a4 4 0 0 1-4-4c0-2 2-3.3 4-6 2 2.7 4 4 4 6a4 4 0 0 1-4 4Z" fill="#FFC15E"/></svg>
+      <h2 class="display font-extrabold text-5xl leading-[.95] mt-6">Order what your team needs.</h2>
+      <p class="mt-3 text-white/75 max-w-sm">One place to request company products, track every order and keep stock under control.</p></div>
+    <div class="text-xs text-white/60">Internal portal · Approved staff only</div>
+  </div>
+  <div class="grid place-items-center p-4">
+  <form id="authForm" class="card p-7 w-full max-w-sm space-y-3">
+    <div class="display font-extrabold text-3xl md:hidden">🔥 WinsFire</div>
+    <h1 class="display font-extrabold text-2xl hidden md:block">Welcome</h1>
+    <p class="text-sm text-black/60">Staff order portal. Sign in to request company products.</p>
+    <label id="nameRow" class="hidden block text-sm font-medium">Full name<input id="an" maxlength="80" autocomplete="name" class="inp mt-1"></label>
+    <label id="phRow" class="hidden block text-sm font-medium">Phone / WhatsApp (optional)<input id="aph" type="tel" maxlength="20" autocomplete="tel" class="inp mt-1"></label>
+    <label id="okRow" class="hidden flex gap-2 items-start text-xs text-black/70"><input id="aok" type="checkbox" class="mt-0.5"><span>I agree to the <button type="button" data-legal="terms" class="underline">Terms</button> and <button type="button" data-legal="privacy" class="underline">Privacy Policy</button>. We store my name, work email and optional phone to run this portal.</span></label>
+    <label class="block text-sm font-medium">Work email<input required id="ae" type="email" autocomplete="username" class="inp mt-1"></label>
+    <label class="block text-sm font-medium">Password<input required id="ap" type="password" minlength="8" autocomplete="current-password" class="inp mt-1"></label>
+    <p id="aErr" class="text-sm text-[#E04A12]" aria-live="polite"></p>
+    <button id="aBtn" class="btn w-full">Sign in</button>
+    <button type="button" id="aSwap" class="w-full text-sm underline">New here? Create an account</button>
+    <div class="text-xs text-black/60 text-center pt-1"><button type="button" data-legal="privacy" class="underline">Privacy</button> · <button type="button" data-legal="terms" class="underline">Terms</button> · <button type="button" data-legal="cookies" class="underline">Cookies</button></div>
+  </form>
+  </div>
+</section>
+
+<!-- Waiting for approval -->
+<section id="pending" class="min-h-screen grid place-items-center p-4 hidden">
+  <div class="card p-6 max-w-sm text-center space-y-3">
+    <div class="text-4xl">⏳</div><h1 class="display font-extrabold text-2xl">Waiting for approval</h1>
+    <p class="text-sm text-black/70">Your account is created. An admin must approve it before you can order. Try again later.</p>
+    <button id="pRefresh" class="btn w-full">Check again</button><button id="pOut" class="btn2 w-full">Sign out</button>
+  </div>
+</section>
+
+<!-- App -->
+<div id="app" class="hidden">
+<button id="skipBtn" class="skip">Skip to content</button>
+<header class="hdr text-white sticky top-0 z-30">
+  <div class="max-w-7xl mx-auto px-3 h-16 flex items-center gap-3">
+    <a id="logoA" href="#/" class="display font-extrabold text-xl whitespace-nowrap">🔥 WinsFire</a>
+    <button id="locBtn" class="hidden md:block text-left text-xs leading-tight shrink-0"><span class="text-white/60">Deliver to</span><br><b id="locTxt">Set location</b></button>
+    <div class="flex flex-1 min-w-0 srch rounded-full overflow-hidden bg-white text-black">
+      <select id="sCat" class="hidden sm:block bg-[#e9e2db] text-sm px-2 max-w-[130px]" aria-label="Category"></select>
+      <input id="sQ" type="search" placeholder="Search WinsFire products or SKU" aria-label="Search" class="flex-1 min-w-0 px-3 py-2 text-sm outline-none">
+      <button id="sGo" class="bg-[#FF5A1F] px-4 text-white" aria-label="Search">🔍</button>
+    </div>
+    <div class="hidden md:block text-xs leading-tight shrink-0"><span class="text-white/60">Hello,</span><br><b id="meName"></b></div>
+    <a href="#/orders" class="text-xs leading-tight shrink-0"><span class="text-white/60">Your</span><br><b>Orders</b></a>
+    <button id="bellBtn" class="relative p-2 shrink-0" aria-label="Notifications">🔔<span id="bellN" class="hidden absolute top-0 right-0 min-w-4 h-4 px-1 rounded-full bg-[#FF5A1F] text-[10px] font-bold grid place-items-center">0</span></button>
+    <button id="themeBtn" class="p-2 shrink-0" aria-label="Toggle dark mode">🌙</button>
+    <button id="openCart" class="relative p-2 shrink-0" aria-label="Open order basket">🧺<span id="count" class="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 rounded-full bg-[#FF5A1F] text-xs font-bold grid place-items-center">0</span></button>
+  </div>
+  <nav class="subnav text-sm"><div class="max-w-7xl mx-auto px-3 h-9 flex items-center gap-5">
+    <a href="#/">All products</a><a href="#/orders">Your orders</a><a id="navAdmin" href="#/admin" class="hidden text-[#FF9A3C] font-bold">Admin</a>
+    <button id="logout" class="ml-auto underline text-white/80">Sign out</button></div></nav>
+</header>
+<main id="view" tabindex="-1" class="max-w-7xl mx-auto px-3 py-6 pb-24 md:pb-6"></main>
+<footer class="max-w-7xl mx-auto px-3 pb-10 pt-4 text-center text-xs text-black/50">🔥 WinsFire internal portal · No payment is taken here<div class="mt-1"><button data-legal="privacy" class="underline">Privacy Policy</button> · <button data-legal="terms" class="underline">Terms</button> · <button data-legal="cookies" class="underline">Cookie Policy</button> · <button data-legal="returns" class="underline">Cancellations &amp; returns</button></div></footer>
+<nav id="bnav" class="md:hidden fixed bottom-0 inset-x-0 z-30 hdr text-white" aria-label="Quick navigation"><div class="grid grid-cols-4 text-[11px]">
+  <a href="#/" class="py-2 text-center"><div class="text-lg">🏠</div>Home</a>
+  <button id="bnSearch" class="py-2"><div class="text-lg">🔍</div>Search</button>
+  <button id="bnCart" class="py-2 relative"><div class="text-lg">🧺</div>Basket<span id="bnCount" class="absolute top-1 right-[26%] min-w-4 h-4 px-1 rounded-full bg-[#C93C08] text-[10px] font-bold grid place-items-center">0</span></button>
+  <a href="#/orders" class="py-2 text-center"><div class="text-lg">📦</div>Orders</a></div></nav>
+</div>
+
+<div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
+<aside id="drawer" role="dialog" aria-modal="true" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 translate-x-full flex flex-col" aria-label="Order request basket">
+  <div class="flex items-center justify-between p-4 border-b"><h2 class="display font-extrabold text-xl">Order Request Basket</h2><button id="closeCart" class="p-2 text-2xl leading-none" aria-label="Close">×</button></div>
+  <div id="items" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+  <div class="p-4 border-t space-y-2"><label class="block text-sm font-medium">Note for the admin (optional)<textarea id="cNote" rows="2" maxlength="300" class="inp mt-1"></textarea></label><div class="flex justify-between font-bold"><span>Estimated total</span><span id="total"></span></div>
+    <p class="text-xs text-black/60">Final prices are confirmed when you submit. No payment is taken. An admin will review your request.</p>
+    <p id="cErr" class="text-sm text-[#E04A12]" aria-live="polite"></p><button id="submitOrder" class="btn w-full">Submit Order Request</button></div>
+</aside>
+<div id="locModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60">
+  <div role="dialog" aria-modal="true" aria-label="Delivery location" class="card p-5 w-full max-w-sm space-y-3"><h2 class="display font-extrabold text-xl">Deliver to</h2>
+    <input id="locIn" maxlength="100" placeholder="Branch, site or address" class="inp"><div class="flex gap-2"><button id="locSave" class="btn flex-1">Save</button><button id="locCancel" class="btn2">Cancel</button></div></div>
+</div>
+<div id="nModal" class="fixed inset-0 z-50 hidden items-start justify-end p-4 bg-black/40"><div role="dialog" aria-modal="true" aria-label="Notifications" class="card w-full max-w-sm mt-14 max-h-[70vh] overflow-y-auto p-4"><div class="flex justify-between items-center mb-2"><h2 class="display font-extrabold text-lg">Notifications</h2><button id="nRead" class="text-xs underline">Mark all read</button></div><div id="nList"></div></div></div>
+<div id="lModal" class="fixed inset-0 z-[55] hidden items-center justify-center p-4 bg-black/60"><div class="card w-full max-w-2xl max-h-[88vh] overflow-y-auto p-6 relative" role="dialog" aria-modal="true" aria-labelledby="lTitle"><button id="lClose" class="absolute top-3 right-4 text-2xl leading-none" aria-label="Close">×</button><div id="lBody" class="legal text-sm"></div></div></div>
+<div id="cookieBar" class="hidden fixed bottom-20 md:bottom-3 left-3 right-3 md:left-auto md:max-w-sm z-[58] card p-4 text-sm" role="region" aria-label="Storage notice"><p>This portal only uses essential storage on your device: your login, basket, saved items and display choice. No tracking or ads. <button data-legal="cookies" class="underline">Details</button></p><button id="cookieOk" class="btn text-sm mt-2 w-full">Got it</button></div>
+<div id="pModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60"><div id="pBody" role="dialog" aria-modal="true" aria-label="Product details" class="card w-full max-w-2xl max-h-[92vh] overflow-y-auto relative"></div></div>
+<div id="toasts" role="status" aria-live="polite" class="fixed bottom-20 md:bottom-4 left-1/2 -translate-x-1/2 z-[60] space-y-2"></div>
+
+<script src="config.js"></script>
+<script>
+// ===================== YOUR SETTINGS =====================
+const CONFIG=Object.assign({url:"",key:"",logo:"",brand:"",company:"WinsFire",contactEmail:"",address:"",grievance:"",law:"India"},window.WINSFIRE_CONFIG||{});   // logo: https link to your logo image. brand: hex color like #FF5A1F
+   // Supabase Project URL and the "anon public" key (safe to put here)
+// =========================================================
+const $=s=>document.querySelector(s);
+const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n).toFixed(2);
+const safeUrl=u=>/^https:\/\/[^\s"'<>]+$/i.test(u||"")?u:"";
+const oid=id=>"WF-"+String(id).slice(0,8).toUpperCase();
+const nice=e=>e&&e.code==="42501"?"You do not have permission for that.":(e&&e.message)||"Something went wrong. Please try again.";
+function wire(form,fn){const run=ev=>{ev.preventDefault();if(!form.reportValidity())return;fn(form)};form.addEventListener("submit",run);const b=form.querySelector("button:not([type=button])");if(b)b.addEventListener("click",ev=>{ev.preventDefault();run(ev)})}
+function toast(m){const t=document.createElement("div");t.className="toast bg-[#141210] text-white px-5 py-2 rounded-full shadow-lg text-sm font-medium";t.textContent=m;$("#toasts").appendChild(t);setTimeout(()=>t.remove(),2600)}
+const ls={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const applyTheme=t=>{document.documentElement.dataset.theme=t;$("#themeBtn").textContent=t==="dark"?"☀️":"🌙"};
+applyTheme(document.documentElement.dataset.theme||"light");
+$("#themeBtn").onclick=()=>{const t=document.documentElement.dataset.theme==="dark"?"light":"dark";ls.set("wf_theme",t);applyTheme(t)};
+if(/^#[0-9a-f]{6}$/i.test(CONFIG.brand||"")){document.documentElement.style.setProperty("--fire",CONFIG.brand);document.documentElement.style.setProperty("--fire2","color-mix(in srgb,"+CONFIG.brand+",black 10%)")}
+if(safeUrl(CONFIG.logo))$("#logoA").innerHTML=`<img src="${esc(CONFIG.logo)}" alt="WinsFire" class="h-8">`;
+const sb=CONFIG.url&&CONFIG.key?supabase.createClient(CONFIG.url,CONFIG.key):null;
+
+let me=null,products=[],cart=[],q="",cat="All",stockOnly=false,sort="name",adminTab="orders",editId=null,mode="in",favs=[],favOnly=false,pendingN=0,lowOnly=false,lastOrders=[],adminOrders=[],mQty=1,mId=null;
+const show=id=>["auth","pending","app"].forEach(x=>$("#"+x).classList.toggle("hidden",x!==id));
+
+// ---------- auth ----------
+function authMode(m){mode=m;$("#nameRow").classList.toggle("hidden",m==="in");$("#phRow").classList.toggle("hidden",m==="in");$("#okRow").classList.toggle("hidden",m==="in");$("#aBtn").textContent=m==="in"?"Sign in":"Create account";$("#aSwap").textContent=m==="in"?"New here? Create an account":"Have an account? Sign in";$("#aErr").textContent="";$("#ap").autocomplete=m==="in"?"current-password":"new-password"}
+$("#aSwap").onclick=()=>authMode(mode==="in"?"up":"in");
+wire($("#authForm"),async()=>{
+  if(!sb){$("#aErr").textContent="Not connected yet. Add your Supabase URL and key in config.js.";return}
+  $("#aErr").textContent="";const email=$("#ae").value.trim(),password=$("#ap").value;
+  try{
+    if(mode==="in"){const{data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;await enter(data.session)}
+    else{const name=$("#an").value.trim();if(!name){$("#aErr").textContent="Please enter your full name.";return}
+      if(!$("#aok").checked){$("#aErr").textContent="Please accept the Terms and Privacy Policy to create an account.";return}
+      const{data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name,phone:$("#aph").value.trim(),consent_at:new Date().toISOString()}}});if(error)throw error;
+      if(data.session)await enter(data.session);else{authMode("in");$("#aErr").textContent="Account created. Confirm your email if asked, then sign in. An admin must approve you."}}
+  }catch(e){$("#aErr").textContent=/invalid login/i.test(e.message)?"Wrong email or password.":nice(e)}});
+const out=async()=>{await sb.auth.signOut();me=null;cart=[];show("auth")};
+$("#logout").onclick=out;$("#pOut").onclick=out;
+async function enter(session){
+  if(!session){show("auth");return}
+  const{data,error}=await sb.from("profiles").select("*").eq("id",session.user.id).single();
+  if(error||!data){await sb.auth.signOut();show("auth");$("#aErr").textContent="Could not load your account.";return}
+  me=data;if(!me.approved){show("pending");return}
+  cart=ls.get("wf_cart_"+me.id,[]);if(!Array.isArray(cart))cart=[];favs=ls.get("wf_fav_"+me.id,[]);if(!Array.isArray(favs))favs=[];
+  $("#meName").textContent=me.full_name||me.email;$("#navAdmin").classList.toggle("hidden",me.role!=="admin");
+  $("#locTxt").textContent=ls.get("wf_loc","")||"Set location";
+  show("app");await loadProducts();route();refreshBadge()}
+$("#pRefresh").onclick=async()=>{const{data}=await sb.auth.getSession();await enter(data.session)};
+
+// ---------- data ----------
+async function loadProducts(){const{data,error}=await sb.from("products").select("*").order("name");if(error){toast(nice(error));return}products=data;
+  const cats=["All",...new Set(products.map(p=>p.category))];$("#sCat").innerHTML=cats.map(c=>`<option ${c===cat?"selected":""}>${esc(c)}</option>`).join("");renderCart()}
+const stockTag=(s,t=10)=>s<=0?`<span class="pill pill-red">Out of stock</span>`:s<=t?`<span class="pill pill-amber">Low stock: ${s} left</span>`:`<span class="pill pill-green">In stock</span>`;
+const stars=r=>r==null?"":`<span class="text-[#FF9A3C]" aria-label="${r} out of 5">${"★".repeat(Math.round(r))}${"☆".repeat(5-Math.round(r))}</span> <span class="text-xs text-black/50">${Number(r).toFixed(1)}</span>`;
+const badge=s=>`<span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${({Pending:"bg-amber-100 text-amber-800",Approved:"bg-blue-100 text-blue-800",Dispatched:"bg-green-100 text-green-800",Rejected:"bg-red-100 text-red-800",Cancelled:"bg-gray-200 text-gray-700"})[s]||""}">● ${esc(s)}</span>`;
+
+// ---------- router ----------
+function route(){if(!me||!me.approved)return;const h=location.hash||"#/";
+  if(h==="#/orders")viewOrders();else if(h==="#/admin"&&me.role==="admin")viewAdmin();else viewHome();window.scrollTo(0,0)}
+addEventListener("hashchange",route);
+
+const skel=`<div class="space-y-3">${'<div class="card skl h-24"></div>'.repeat(3)}</div>`;
+async function refreshBadge(){if(!me)return;loadNotes();if(me.role!=="admin")return;const{count}=await sb.from("orders").select("id",{count:"exact",head:true}).eq("status","Pending");pendingN=count||0;$("#navAdmin").textContent=pendingN?`Admin (${pendingN} pending)`:"Admin"}
+setInterval(refreshBadge,60000);
+let notes=[];
+async function loadNotes(){const{data}=await sb.from("notifications").select("*").order("created_at",{ascending:false}).limit(20);notes=data||[];const n=notes.filter(x=>!x.read).length;$("#bellN").textContent=n;$("#bellN").classList.toggle("hidden",!n)}
+function drawNotes(){$("#nList").innerHTML=notes.length?notes.map(n=>`<div class="py-2 border-b text-sm ${n.read?"text-black/50":"font-bold"}">${esc(n.message)}<div class="text-xs font-normal text-black/50">${esc(new Date(n.created_at).toLocaleString())}</div></div>`).join(""):`<p class="text-sm text-black/60 py-6 text-center">No notifications yet.</p>`}
+$("#bellBtn").onclick=async()=>{await loadNotes();drawNotes();$("#nModal").classList.replace("hidden","flex")};
+$("#nModal").addEventListener("click",e=>{if(e.target.id==="nModal")$("#nModal").classList.replace("flex","hidden")});
+$("#nRead").onclick=async()=>{await sb.from("notifications").update({read:true}).eq("read",false);await loadNotes();drawNotes()};
+
+// ---------- home ----------
+const isNew=p=>p.created_at&&Date.now()-new Date(p.created_at)<14*864e5;
+function pcard(p){const img=safeUrl(p.image_url);return `<article class="card pcard overflow-hidden flex flex-col">
+     <div data-view="${esc(p.id)}" tabindex="0" role="button" aria-label="View ${esc(p.name)}" class="aspect-square bg-[#FFE3D1] grid place-items-center text-5xl relative cursor-pointer"><button data-fav="${esc(p.id)}" aria-label="Save ${esc(p.name)}" class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 text-base leading-none z-10">${favs.includes(p.id)?"❤️":"🤍"}</button>${isNew(p)?`<span class="absolute top-2 left-2 bg-[#141210] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>`:""}<span class="qv">Quick view</span>${img?`<img src="${esc(img)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" class="w-full h-full object-cover">`:"📦"}</div>
+     <div class="p-3 flex flex-col flex-1 gap-1"><h3 data-view="${esc(p.id)}" tabindex="0" role="button" class="font-bold leading-snug cursor-pointer hover:underline">${esc(p.name)}</h3>${stars(p.rating)}<div class="text-xs text-black/50">SKU ${esc(p.sku)}</div>
+     <div class="display font-extrabold text-xl">${money(p.price)}</div><div class="text-sm">${stockTag(p.stock,p.low_stock_at??10)}</div>
+     <button data-add="${esc(p.id)}" ${p.stock<=0?"disabled":""} class="btn mt-auto text-sm" style="margin-top:.6rem">Add to Order List</button></div></article>`}
+function viewHome(){
+  const cats=["All",...new Set(products.map(p=>p.category))];
+  let list=products.filter(p=>(cat==="All"||p.category===cat)&&(!stockOnly||p.stock>0)&&(!favOnly||favs.includes(p.id))&&(p.name+" "+p.sku).toLowerCase().includes(q.toLowerCase()));
+  list.sort((a,b)=>sort==="low"?a.price-b.price:sort==="high"?b.price-a.price:sort==="new"?new Date(b.created_at)-new Date(a.created_at):a.name.localeCompare(b.name));
+  const fresh=!q&&cat==="All"&&!stockOnly&&!favOnly,first=esc((me.full_name||"there").split(" ")[0]);
+  const newest=[...products].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,4);
+  const tiles=cats.slice(1,7).map(c=>{const ps=products.filter(p=>p.category===c),im=safeUrl((ps.find(p=>p.image_url)||{}).image_url);return `<button data-cat="${esc(c)}" class="tile" style="${im?`background-image:linear-gradient(180deg,#14121000 30%,#141210cc),url('${esc(im)}')`:"background:linear-gradient(135deg,#40302a,#141210)"}"><span class="font-bold text-lg">${esc(c)}</span><span class="text-xs text-white/80">${ps.length} item${ps.length===1?"":"s"}</span></button>`}).join("");
+  const extras=`<section class="hero2 mb-6"><div class="max-w-xl"><p class="text-white/80 text-sm">Welcome, ${first}</p><h1 class="display font-extrabold text-4xl md:text-6xl leading-[.98] mt-1">Everything your team needs, in one place.</h1><p class="text-white/80 mt-3">Browse company products and request what you need in seconds. An admin reviews every request.</p><div class="flex flex-wrap gap-3 mt-6"><button data-scroll="all" class="btn" style="background:#fff;color:#141210">Browse products</button><a href="#/orders" class="btn2" style="background:transparent;color:#fff;border-color:#ffffff55">Your orders</a></div></div></section>
+   <div class="grid grid-cols-3 gap-3 mb-8 text-center text-xs md:text-sm"><div class="card p-3">✓ Admin-approved requests</div><div class="card p-3">📦 Live stock levels</div><div class="card p-3">🧾 Track every order</div></div>
+   ${tiles&&cats.length>2?`<h2 class="display font-extrabold text-2xl mb-3">Shop by category</h2><div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-10">${tiles}</div>`:""}
+   ${newest.length?`<h2 class="display font-extrabold text-2xl mb-3">New arrivals</h2><div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">${newest.map(pcard).join("")}</div>`:""}`;
+  $("#view").innerHTML=`${fresh?extras:""}<h2 id="all" class="display font-extrabold text-2xl mb-3">${fresh?"All products":"Results"}</h2><div class="grid md:grid-cols-[210px_1fr] gap-6">
+   <aside class="side card p-3 h-fit"><b>Department</b>${cats.map(c=>`<button data-cat="${esc(c)}" class="${c===cat?"on":""}">${esc(c)}</button>`).join("")}
+    <b>Availability</b><label class="flex gap-2 items-center text-sm px-1"><input type="checkbox" id="fStock" ${stockOnly?"checked":""}> In stock only</label><label class="flex gap-2 items-center text-sm px-1 mt-1"><input type="checkbox" id="fFav" ${favOnly?"checked":""}> Saved items only</label>
+    <b>Sort by</b><select id="fSort" class="inp"><option value="name" ${sort==="name"?"selected":""}>Name</option><option value="low" ${sort==="low"?"selected":""}>Price: low to high</option><option value="high" ${sort==="high"?"selected":""}>Price: high to low</option><option value="new" ${sort==="new"?"selected":""}>Newest</option></select></aside>
+   <section><p class="text-sm text-black/60 mb-3">${list.length} product${list.length===1?"":"s"}${q?` for “${esc(q)}”`:""}</p>
+   ${list.length?`<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">${list.map(pcard).join("")}</div>`:`<div class="card p-10 text-center text-black/60">${products.length?"No products match. Try different filters.":"No products have been added yet."}</div>`}</section></div>`;
+  $("#fStock").onchange=e=>{stockOnly=e.target.checked;viewHome()};$("#fSort").onchange=e=>{sort=e.target.value;viewHome()};$("#fFav").onchange=e=>{favOnly=e.target.checked;viewHome()}}
+const goHome=()=>{q=$("#sQ").value.trim();cat=$("#sCat").value||"All";location.hash==="#/"||!location.hash?viewHome():location.hash="#/"};
+$("#sGo").onclick=goHome;$("#sQ").addEventListener("keydown",e=>{if(e.key==="Enter")goHome()});$("#sCat").onchange=goHome;
+
+// ---------- basket ----------
+const lines=()=>cart.map(c=>({c,p:products.find(x=>x.id===c.id)})).filter(x=>x.p);
+function renderCart(){const L=lines();cart=L.map(x=>x.c);ls.set("wf_cart_"+me.id,cart);
+  $("#count").textContent=$("#bnCount").textContent=cart.reduce((s,c)=>s+c.qty,0);$("#total").textContent=money(L.reduce((s,x)=>s+x.c.qty*x.p.price,0));$("#submitOrder").disabled=!L.length;
+  $("#items").innerHTML=L.length?L.map(({c,p})=>`<div class="flex gap-3 items-center"><div class="w-14 h-14 rounded-lg bg-[#FFE3D1] grid place-items-center text-2xl shrink-0">📦</div>
+   <div class="flex-1 min-w-0"><div class="font-bold truncate">${esc(p.name)}</div><div class="text-sm text-black/60">${money(p.price)} · ${p.stock} available</div>
+   <div class="flex items-center gap-2 mt-1"><button data-dec="${esc(p.id)}" class="w-7 h-7 rounded-full border" aria-label="Less">−</button><span class="w-6 text-center">${c.qty}</span><button data-inc="${esc(p.id)}" class="w-7 h-7 rounded-full border" aria-label="More">+</button><button data-rm="${esc(p.id)}" class="ml-auto text-sm text-[#E04A12] underline">Remove</button></div></div></div>`).join(""):`<p class="text-center text-black/60 py-16">Your basket is empty. Add products to request them.</p>`}
+const openCart=()=>{remember();$("#drawer").inert=false;$("#cErr").textContent="";$("#drawer").classList.remove("translate-x-full");$("#overlay").classList.remove("hidden");setTimeout(()=>$("#closeCart").focus(),60)};
+const closeCart=()=>{const was=!$("#drawer").classList.contains("translate-x-full");$("#drawer").classList.add("translate-x-full");$("#overlay").classList.add("hidden");$("#drawer").inert=true;if(was)restore()};
+$("#openCart").onclick=openCart;$("#bnCart").onclick=openCart;$("#bnSearch").onclick=()=>{location.hash="#/";window.scrollTo(0,0);$("#sQ").focus()};$("#closeCart").onclick=closeCart;$("#overlay").onclick=closeCart;
+$("#submitOrder").onclick=async()=>{$("#cErr").textContent="";const b=$("#submitOrder");b.disabled=true;
+  const{data,error}=await sb.rpc("place_order",{items:cart.map(c=>({product_id:c.id,quantity:c.qty})),location:ls.get("wf_loc",""),order_note:$("#cNote").value.trim()});
+  if(error){$("#cErr").textContent=nice(error);b.disabled=false;await loadProducts();return}
+  cart=[];$("#cNote").value="";await loadProducts();closeCart();toast("Order request "+oid(data)+" submitted");location.hash="#/orders"};
+
+// ---------- location ----------
+const locOpen=()=>{remember();$("#locIn").value=ls.get("wf_loc","");$("#locModal").classList.replace("hidden","flex");$("#locIn").focus()};
+$("#locBtn").onclick=locOpen;$("#locCancel").onclick=()=>{$("#locModal").classList.replace("flex","hidden");restore()};
+$("#locSave").onclick=()=>{const v=$("#locIn").value.trim().slice(0,100);ls.set("wf_loc",v);$("#locTxt").textContent=v||"Set location";$("#locModal").classList.replace("flex","hidden");restore()};
+
+// ---------- my orders ----------
+const steps=["Pending","Approved","Dispatched"];
+function timeline(st){if(!steps.includes(st))return "";const i=steps.indexOf(st);return `<div class="flex items-center gap-1 mt-3 text-xs" aria-label="Progress">${steps.map((t,k)=>`<span class="flex items-center gap-1 ${k<=i?"font-bold text-[#C2410C]":"text-black/40"}"><span class="w-5 h-5 rounded-full grid place-items-center text-white ${k<=i?"bg-[#FF5A1F]":"bg-black/20"}">${k<i?"✓":k+1}</span>${t}</span>${k<2?`<span class="flex-1 h-px ${k<i?"bg-[#FF5A1F]":"bg-black/20"}"></span>`:""}`).join("")}</div>`}
+function orderCard(o,admin){const sts=["Pending","Approved","Dispatched","Rejected"];return `<article class="card p-4"><div class="flex flex-wrap items-center gap-2 justify-between"><div><span class="display font-extrabold">${oid(o.id)}</span> <span class="text-sm text-black/60">${esc(new Date(o.created_at).toLocaleString())}</span></div>
+  ${admin?`<select data-os="${esc(o.id)}" class="inp" style="width:auto" aria-label="Order status">${o.status==="Cancelled"?`<option selected disabled>Cancelled</option>`:""}${sts.map(x=>`<option ${x===o.status?"selected":""}>${x}</option>`).join("")}</select>`:badge(o.status)}</div>
+  ${admin?`<div class="text-sm mt-1"><b>${esc(o.profiles?.full_name||"")}</b> · ${esc(o.profiles?.email||"")}</div>`:""}
+  ${o.delivery_location?`<div class="text-sm text-black/60 mt-1">Deliver to: ${esc(o.delivery_location)}</div>`:""}
+  ${o.note?`<div class="text-sm mt-1 bg-[#FFF4EA] rounded-lg px-3 py-2">Note: ${esc(o.note)}</div>`:""}
+  <ul class="mt-2 text-sm">${(o.order_items||[]).map(i=>`<li>${esc(i.quantity)} × ${esc(i.product_name)} <span class="text-black/50">(${money(i.unit_price)})</span></li>`).join("")}</ul>
+  ${timeline(o.status)}
+  <div class="mt-3 flex flex-wrap items-center gap-2"><b class="mr-auto">${o.total_items} item${o.total_items===1?"":"s"} · ${money(o.total_value)}</b>
+  ${!admin?`<button data-again="${esc(o.id)}" class="btn2 text-sm">Order again</button>`:""}${!admin&&o.status==="Pending"?`<button data-cancel="${esc(o.id)}" class="btn2 text-sm text-[#E04A12]">Cancel request</button>`:""}${admin&&o.profiles?.phone?`<a class="btn2 text-sm" target="_blank" rel="noopener noreferrer" href="https://wa.me/${String(o.profiles.phone).replace(/\D/g,"")}?text=${encodeURIComponent("Hi, your WinsFire order request "+oid(o.id)+" is now "+o.status+".")}">Notify on WhatsApp</a>`:""}<button data-print="1" class="btn2 text-sm">Print</button></div></article>`}
+async function viewOrders(){$("#view").innerHTML=`<h1 class="display font-extrabold text-2xl mb-4">Your orders</h1><div id="ol">${skel}</div>`;
+  const{data,error}=await sb.from("orders").select("*,order_items(product_id,product_name,quantity,unit_price)").eq("user_id",me.id).order("created_at",{ascending:false});
+  lastOrders=data||[];$("#ol").innerHTML=error?esc(nice(error)):data.length?data.map(o=>orderCard(o,false)).join(""):`<div class="card p-10 text-center text-black/60">No order requests yet. Add products to your basket and submit a request.</div>`}
+
+// ---------- admin ----------
+async function viewAdmin(){
+  $("#view").innerHTML=`<h1 class="display font-extrabold text-2xl mb-4">Admin</h1><div id="dash"></div><div class="flex flex-wrap gap-2 mb-4" role="tablist">${["orders","products","inventory","team"].map(t=>`<button class="tab" role="tab" data-at="${t}" aria-selected="${t===adminTab}">${({orders:"Order requests",products:"Products",inventory:"Inventory",team:"Team"})[t]}</button>`).join("")}</div><div id="ab">${skel}</div>`;
+  const ab=$("#ab");
+  const{data:ords,error:oe}=await sb.from("orders").select("*,profiles(full_name,email,phone),order_items(product_id,product_name,quantity,unit_price)").order("created_at",{ascending:false});
+  const O=adminOrders=ords||[];pendingN=O.filter(o=>o.status==="Pending").length;$("#navAdmin").textContent=pendingN?`Admin (${pendingN} pending)`:"Admin";
+  const live=O.filter(o=>!["Rejected","Cancelled"].includes(o.status)),low=products.filter(p=>p.stock>0&&p.stock<=(p.low_stock_at??10)).length,outN=products.filter(p=>p.stock<=0).length;
+  $("#dash").innerHTML=`<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">${[["Pending requests",pendingN,pendingN?"text-[#C2410C]":""],["Low stock items",low,low?"text-[#C2410C]":""],["Out of stock",outN,outN?"text-red-600":""],["Value requested",money(live.reduce((s,o)=>s+Number(o.total_value),0)),""]].map(([x,y,c])=>`<div class="card p-4"><div class="text-sm text-black/60">${x}</div><div class="display font-extrabold text-2xl ${c}">${esc(y)}</div></div>`).join("")}</div>`;
+  if(adminTab==="orders")ab.innerHTML=oe?esc(nice(oe)):`<div class="flex justify-end mb-3"><button id="csvBtn" class="btn2 text-sm">Export CSV</button></div><div class="space-y-3">${O.length?O.map(o=>orderCard(o,true)).join(""):`<div class="card p-10 text-center text-black/60">No order requests yet.</div>`}</div>`;
+  if(adminTab==="products"){const e=products.find(p=>p.id===editId)||{};
+    ab.innerHTML=`<div class="grid md:grid-cols-[310px_1fr] gap-6"><form id="pf" class="card p-4 space-y-2 h-fit"><h2 class="display font-extrabold text-lg">${e.id?"Edit product":"Add product"}</h2>
+     <label class="block text-sm font-medium">Name<input required id="pn" maxlength="120" value="${esc(e.name)}" class="inp mt-1"></label>
+     <div class="grid grid-cols-2 gap-2"><label class="block text-sm font-medium">SKU<input required id="psku" maxlength="40" value="${esc(e.sku)}" class="inp mt-1"></label><label class="block text-sm font-medium">Category<input id="pc" maxlength="40" value="${esc(e.category)}" class="inp mt-1"></label>
+     <label class="block text-sm font-medium">Price<input required id="pp" type="number" step="0.01" min="0" value="${esc(e.price)}" class="inp mt-1"></label><label class="block text-sm font-medium">Stock qty<input required id="pst" type="number" step="1" min="0" value="${esc(e.stock)}" class="inp mt-1"></label>
+     <label class="block text-sm font-medium">Low-stock alert at<input id="pl" type="number" step="1" min="0" value="${esc(e.low_stock_at??10)}" class="inp mt-1"></label></div>
+     <label class="block text-sm font-medium">Description<textarea id="pd" rows="3" maxlength="1000" class="inp mt-1">${esc(e.description)}</textarea></label>
+     <label class="block text-sm font-medium">Image (JPG, PNG or WebP, up to 2 MB)<input id="pfile" type="file" accept="image/png,image/jpeg,image/webp" class="mt-1 text-sm"></label><label class="flex gap-2 items-start text-xs text-black/70"><input id="pown" type="checkbox" class="mt-0.5"> I took this photo or have the right to use it. I am not copying images from other websites or brands.</label>
+     <button class="btn w-full">${e.id?"Save changes":"Add product"}</button>${e.id?`<button type="button" id="pCancel" class="w-full text-sm underline">Cancel edit</button>`:""}</form>
+     <div class="space-y-2">${products.length?products.map(p=>`<div class="card p-3 flex items-center gap-3"><div class="w-12 h-12 rounded-lg bg-[#FFE3D1] overflow-hidden grid place-items-center shrink-0">${safeUrl(p.image_url)?`<img src="${esc(p.image_url)}" alt="" class="w-full h-full object-cover" referrerpolicy="no-referrer">`:"📦"}</div>
+      <div class="flex-1 min-w-0"><div class="font-bold truncate">${esc(p.name)}</div><div class="text-xs text-black/50">SKU ${esc(p.sku)} · ${esc(p.category)} · ${money(p.price)}</div></div>
+      <div class="text-sm text-right">${stockTag(p.stock,p.low_stock_at??10)}</div>
+      <button data-pe="${esc(p.id)}" class="btn2 text-sm">Edit</button><button data-pd="${esc(p.id)}" class="btn2 text-sm text-[#E04A12]">Delete</button></div>`).join(""):`<div class="card p-10 text-center text-black/60">No products yet. Add your first one.</div>`}</div></div>`;
+    wire($("#pf"),saveProduct);const c=$("#pCancel");if(c)c.onclick=()=>{editId=null;viewAdmin()}}
+  if(adminTab==="inventory"){const L=products.filter(p=>!lowOnly||p.stock<=(p.low_stock_at??10));
+    ab.innerHTML=`<label class="flex gap-2 items-center text-sm mb-3"><input type="checkbox" id="fLow" ${lowOnly?"checked":""}> Show low and out-of-stock only</label><div class="space-y-2">${L.length?L.map(p=>`<div class="card p-3 flex flex-wrap items-center gap-3"><div class="flex-1 min-w-[140px]"><div class="font-bold">${esc(p.name)}</div><div class="text-xs text-black/50">SKU ${esc(p.sku)}</div></div><div class="text-sm">${stockTag(p.stock,p.low_stock_at??10)}</div>
+      <label class="text-xs text-black/60">Stock<input id="st-${esc(p.id)}" type="number" min="0" step="1" value="${p.stock}" class="inp" style="width:90px"></label><button data-ss="${esc(p.id)}" class="btn text-sm">Update</button></div>`).join(""):`<div class="card p-10 text-center text-black/60">Nothing needs restocking.</div>`}</div>`;
+    $("#fLow").onchange=e=>{lowOnly=e.target.checked;viewAdmin()}}
+  if(adminTab==="team"){const{data,error}=await sb.from("profiles").select("*").order("created_at",{ascending:false});
+    ab.innerHTML=error?esc(nice(error)):`<p class="text-sm text-black/60 mb-3">New sign-ups cannot order until you approve them here.</p><div class="space-y-2">${data.map(u=>`<div class="card p-3 flex flex-wrap items-center gap-3"><div class="flex-1 min-w-0"><b>${esc(u.full_name||"(no name)")}</b><div class="text-xs text-black/50">${esc(u.email)}</div></div>
+     ${u.id===me.id?`<span class="text-sm text-black/50">You</span>`:`<select data-role="${esc(u.id)}" class="inp" style="width:auto" aria-label="Role"><option ${u.role==="employee"?"selected":""} value="employee">Employee</option><option ${u.role==="admin"?"selected":""} value="admin">Admin</option></select>
+     <button data-ap="${esc(u.id)}" data-v="${u.approved?"0":"1"}" class="btn2 text-sm ${u.approved?"":"!bg-[#FF5A1F] !text-white"}">${u.approved?"Revoke access":"Approve"}</button>`}</div>`).join("")}</div>`}}
+function exportCsv(){const cell=v=>{let t=String(v??"");if(/^[=+\-@\t\r]/.test(t))t="'"+t;return '"'+t.replace(/"/g,'""')+'"'};
+  const rows=[["Order ID","Date","Employee","Email","Status","Deliver to","Note","Items","Total items","Total value"],...adminOrders.map(o=>[oid(o.id),new Date(o.created_at).toISOString(),o.profiles?.full_name,o.profiles?.email,o.status,o.delivery_location,o.note,(o.order_items||[]).map(i=>i.quantity+"x "+i.product_name).join("; "),o.total_items,o.total_value])];
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([rows.map(r=>r.map(cell).join(",")).join("\n")],{type:"text/csv"}));a.download="winsfire-orders.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+// ---------- product detail ----------
+function drawModal(){const p=products.find(x=>x.id===mId);if(!p)return;const img=safeUrl(p.image_url);
+  $("#pBody").innerHTML=`<button id="mClose" class="absolute top-2 right-3 text-2xl leading-none z-10 bg-white/80 rounded-full w-8 h-8" aria-label="Close">×</button><div class="grid md:grid-cols-2"><div class="aspect-square bg-[#FFE3D1] grid place-items-center text-7xl">${img?`<img src="${esc(img)}" alt="${esc(p.name)}" referrerpolicy="no-referrer" class="w-full h-full object-cover">`:"📦"}</div>
+   <div class="p-5 space-y-2"><div class="text-xs text-black/50">${esc(p.category)} · SKU ${esc(p.sku)}</div><h2 class="display font-extrabold text-2xl">${esc(p.name)}</h2>${stars(p.rating)}<div class="display font-extrabold text-3xl">${money(p.price)}</div><div>${stockTag(p.stock,p.low_stock_at??10)}</div>
+   <p class="text-sm text-black/70 whitespace-pre-wrap">${esc(p.description||"No description yet.")}</p>
+   <ul class="text-xs text-black/70 space-y-1 pt-1"><li>✓ Reviewed and approved by an admin</li><li>✓ Live stock levels</li><li>✓ Cancel any time while Pending</li></ul>${p.stock>0?`<div class="mbar flex items-center gap-3"><div class="flex items-center gap-1"><button data-mq="-1" class="w-9 h-9 rounded-full border" aria-label="Less">−</button><span class="w-8 text-center font-bold">${mQty}</span><button data-mq="1" class="w-9 h-9 rounded-full border" aria-label="More">+</button></div><button data-madd="${esc(p.id)}" class="btn flex-1">Add to Order List · ${money(p.price*mQty)}</button></div>`:`<div class="mbar text-sm font-bold text-red-700">Currently out of stock</div>`}
+   <button data-fav="${esc(p.id)}" class="btn2 w-full">${favs.includes(p.id)?"❤️ Saved":"🤍 Save for later"}</button><div id="revBox" class="pt-3"></div></div></div>`;drawReviews()}
+let rev={pid:null,list:[],can:false,stars:5};
+async function loadReviews(pid){rev={pid,list:[],can:false,stars:5};drawReviews();
+  const[r1,r2]=await Promise.all([sb.from("product_reviews").select("*").eq("product_id",pid).order("created_at",{ascending:false}).limit(5),sb.from("order_items").select("id,orders!inner(status,user_id)").eq("product_id",pid).eq("orders.status","Dispatched").eq("orders.user_id",me.id).limit(1)]);
+  if(rev.pid!==pid)return;rev.list=r1.data||[];rev.can=!!(r2.data&&r2.data.length);drawReviews()}
+function drawReviews(){const b=$("#revBox");if(!b)return;const p=products.find(x=>x.id===mId),keep=$("#rvText")?$("#rvText").value:"";
+  b.innerHTML=`<div class="font-bold text-sm mb-1">Staff reviews${p&&p.rating_count?` (${p.rating_count})`:""}</div>${rev.list.length?rev.list.map(r=>`<div class="text-sm py-1"><span class="text-[#FF9A3C]">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</span> <b>${esc(r.author_name)}</b>${r.comment?`<div class="text-black/70">${esc(r.comment)}</div>`:""}</div>`).join(""):`<p class="text-sm text-black/50">No reviews yet. Reviews come only from staff whose order for this product was dispatched.</p>`}
+  ${rev.can?`<div class="mt-2 pt-2 border-t"><div class="text-sm font-medium">Rate this product</div><div class="flex gap-1 my-1">${[1,2,3,4,5].map(n=>`<button data-star="${n}" class="text-2xl leading-none ${n<=rev.stars?"text-[#FF9A3C]":"text-black/25"}" aria-label="${n} star">★</button>`).join("")}</div><textarea id="rvText" rows="2" maxlength="500" placeholder="Optional comment" class="inp">${esc(keep)}</textarea><button data-rate="${esc(mId)}" class="btn w-full mt-2 text-sm">Submit review</button></div>`:""}`}
+function openProduct(id){remember();mId=id;mQty=1;drawModal();setTimeout(()=>{const c=$("#mClose");if(c)c.focus()},60);loadReviews(id);$("#pModal").classList.replace("hidden","flex")}
+const closeModal=()=>{if($("#pModal").classList.contains("hidden"))return;$("#pModal").classList.replace("flex","hidden");restore()};
+$("#pModal").addEventListener("click",e=>{if(e.target.id==="pModal")closeModal()});
+addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeCart();$("#locModal").classList.replace("flex","hidden")}
+  if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.view)openProduct(e.target.dataset.view)});
+async function upload(f){if(!/^image\/(jpeg|png|webp)$/.test(f.type)||f.size>2097152)throw new Error("Use a JPG, PNG or WebP image under 2 MB.");
+  const ext={"image/jpeg":"jpg","image/png":"png","image/webp":"webp"}[f.type],path=crypto.randomUUID()+"."+ext;
+  const{error}=await sb.storage.from("product-images").upload(path,f,{contentType:f.type});if(error)throw error;return sb.storage.from("product-images").getPublicUrl(path).data.publicUrl}
+async function saveProduct(){
+  const d={name:$("#pn").value.trim(),sku:$("#psku").value.trim(),price:Math.round(parseFloat($("#pp").value)*100)/100,stock:parseInt($("#pst").value,10),category:$("#pc").value.trim()||"General",description:$("#pd").value.trim(),low_stock_at:$("#pl").value===""?10:parseInt($("#pl").value,10)};
+  try{const f=$("#pfile").files[0];if(f&&!$("#pown").checked){toast("Please confirm you have the right to use this image.");return}if(f)d.image_url=await upload(f);
+    const r=editId?await sb.from("products").update(d).eq("id",editId):await sb.from("products").insert(d);if(r.error)throw r.error;
+    editId=null;await loadProducts();toast("Product saved");viewAdmin()}
+  catch(e){toast(e.code==="23505"?"That SKU already exists.":nice(e))}}
+
+// ---------- one click handler for everything ----------
+document.addEventListener("click",async e=>{if(!me)return;const b=e.target.closest("button");if(!b){const v=e.target.closest("[data-view]");if(v)openProduct(v.dataset.view);return}const d=b.dataset;
+  try{
+  if(b.id==="mClose")closeModal();
+  if(d.star){rev.stars=Number(d.star);drawReviews()}
+  if(d.rate){const{error}=await sb.rpc("rate_product",{pid:d.rate,stars:rev.stars,review:$("#rvText").value.trim()});if(error)throw error;toast("Thanks for your review");await loadProducts();await loadReviews(d.rate);drawModal()}
+  if(b.id==="csvBtn")exportCsv();
+  if(d.fav){favs=favs.includes(d.fav)?favs.filter(x=>x!==d.fav):[...favs,d.fav];ls.set("wf_fav_"+me.id,favs);if(!$("#pModal").classList.contains("hidden"))drawModal();if((location.hash||"#/")==="#/")viewHome()}
+  if(d.mq){const p=products.find(x=>x.id===mId);mQty=Math.min(Math.max(mQty+Number(d.mq),1),p.stock);drawModal()}
+  if(d.madd){const p=products.find(x=>x.id===d.madd),f=cart.find(x=>x.id===p.id);const want=Math.min((f?f.qty:0)+mQty,p.stock);f?f.qty=want:cart.push({id:p.id,qty:want});renderCart();closeModal();toast("Added to order list")}
+  if(d.again){const o=lastOrders.find(x=>x.id===d.again);let n=0;(o?.order_items||[]).forEach(i=>{const p=products.find(x=>x.id===i.product_id);if(!p||p.stock<=0)return;const f=cart.find(x=>x.id===p.id),want=Math.min(i.quantity+(f?f.qty:0),p.stock);f?f.qty=want:cart.push({id:p.id,qty:want});n++});renderCart();if(n){toast("Items added to your basket");openCart()}else toast("Those products are no longer available")}
+  if(d.cancel&&confirm("Cancel this request?")){const{error}=await sb.rpc("cancel_order",{oid:d.cancel});if(error)throw error;toast("Request cancelled");await loadProducts();viewOrders()}
+  if(d.print){const a=b.closest("article");a.classList.add("printing");window.print();setTimeout(()=>a.classList.remove("printing"),500)}
+  if(d.ss){const v=parseInt(document.getElementById("st-"+d.ss).value,10);if(!(v>=0))throw new Error("Enter a valid quantity");const{error}=await sb.from("products").update({stock:v}).eq("id",d.ss);if(error)throw error;await loadProducts();toast("Stock updated");viewAdmin()}
+  if(d.scroll){const t=document.getElementById(d.scroll);if(t)t.scrollIntoView({behavior:"smooth"})}
+  if(d.cat){cat=d.cat;$("#sCat").value=cat;viewHome()}
+  if(d.add){const p=products.find(x=>x.id===d.add),f=cart.find(x=>x.id===d.add);if(!p||p.stock<=0)return;if(f){if(f.qty>=p.stock){toast("Only "+p.stock+" available");return}f.qty++}else cart.push({id:p.id,qty:1});renderCart();toast("Added to order list")}
+  if(d.inc){const p=products.find(x=>x.id===d.inc),f=cart.find(x=>x.id===d.inc);if(f.qty<p.stock)f.qty++;else toast("Only "+p.stock+" available");renderCart()}
+  if(d.dec){const f=cart.find(x=>x.id===d.dec);f.qty--;if(f.qty<1)cart=cart.filter(x=>x!==f);renderCart()}
+  if(d.rm){cart=cart.filter(x=>x.id!==d.rm);renderCart()}
+  if(d.at){adminTab=d.at;viewAdmin()}
+  if(d.pe){editId=d.pe;viewAdmin();window.scrollTo(0,0)}
+  if(d.pd){const p=products.find(x=>x.id===d.pd);if(confirm(`Delete "${p.name}"? Past orders keep their record.`)){const{error}=await sb.from("products").delete().eq("id",p.id);if(error)throw error;await loadProducts();toast("Product deleted");viewAdmin()}}
+  if(d.ap){const{error}=await sb.from("profiles").update({approved:d.v==="1"}).eq("id",d.ap);if(error)throw error;toast(d.v==="1"?"Approved":"Access revoked");viewAdmin()}
+  }catch(err){toast(nice(err))}});
+document.addEventListener("change",async e=>{const d=e.target.dataset;if(!me)return;
+  try{if(d.os){const{error}=await sb.rpc("set_order_status",{oid:d.os,new_status:e.target.value});if(error)throw error;toast("Order updated");await loadProducts();viewAdmin()}
+  if(d.role){const{error}=await sb.from("profiles").update({role:e.target.value}).eq("id",d.role);if(error)throw error;toast("Role updated")}}
+  catch(err){toast(nice(err));if(me.role==="admin"&&d.os)viewAdmin()}});
+
+// ---------- legal pages, notices, keyboard ----------
+let lastFocus=null;const remember=()=>{lastFocus=document.activeElement};const restore=()=>{try{lastFocus&&lastFocus.focus()}catch(e){}};
+const C=CONFIG,co=esc(C.company||"WinsFire"),mail=esc(C.contactEmail||"[add your contact email in config.js]"),addr=esc(C.address||"[add your address in config.js]"),gr=esc(C.grievance||C.contactEmail||"[add a grievance contact in config.js]"),law=esc(C.law?"the laws of "+C.law:"the laws that apply where "+(C.company||"WinsFire")+" is based");
+const LEGAL={
+privacy:["Privacy Policy",`<p>${co} ("we") runs this internal ordering portal. Contact: ${mail}. Address: ${addr}.</p>
+<h3>What we collect</h3><ul><li>Account: your name, work email and optional phone or WhatsApp number. Your password is handled by our login provider and is never visible to us.</li><li>Orders: the products, quantities, delivery location and notes in your order requests, plus their status and dates.</li><li>Reviews you choose to write, and notifications about your orders.</li><li>On your device only: your basket, saved items, delivery location, display choice and login session.</li><li>Technical data such as your IP address, which our hosting and login providers see when you use the portal.</li></ul>
+<h3>Why we use it</h3><ul><li>To approve staff accounts and let you request company products.</li><li>To review, fulfil and track orders and tell you when their status changes.</li><li>To keep stock accurate and the portal secure.</li></ul><p>We do not sell your data and we do not use it for advertising or tracking.</p>
+<h3>Who can see it</h3><p>Admins at ${co} can see accounts, orders and reviews. Our database, login and image storage are provided by Supabase, which processes data on our behalf.</p>
+<h3>Third-party services this page loads</h3><p>Supabase (database, login, image storage), Tailwind CSS (cdn.tailwindcss.com), Google Fonts (fonts.googleapis.com and fonts.gstatic.com) and jsDelivr (cdn.jsdelivr.net). These providers can see your IP address and browser details when the page loads.</p>
+<h3>How long we keep it</h3><p>While your account is active, and afterwards only as long as needed for business records or the law. You can ask us to delete your account and data.</p>
+<h3>Your rights</h3><p>You can ask to see, correct or delete your data, withdraw your consent, or make a complaint. Email ${mail}. Grievance contact: ${gr}. Where laws such as India's Digital Personal Data Protection Act, 2023 or the GDPR apply, you also have the rights they give you.</p>
+<h3>Security and age</h3><p>Access is limited to approved accounts and the connection is encrypted. This portal is not for people under 18.</p>
+<h3>Changes</h3><p>If we change this policy we will update this page.</p>`],
+terms:["Terms and Conditions",`<p>By creating an account or sending an order request you agree to these terms.</p>
+<h3>Who can use the portal</h3><p>It is for staff and clients of ${co}. An admin must approve every account, and we may refuse or remove access at any time.</p>
+<h3>Your account</h3><p>Give accurate details, keep your password private, and tell us if you think someone else has used your account.</p>
+<h3>Order requests</h3><ul><li>An order request is a request, not a confirmed sale. It is confirmed only when an admin approves it.</li><li>Products depend on stock. Prices are set by ${co} and confirmed when you submit the request.</li><li>No payment is taken in this portal. Payment and delivery are handled as agreed with ${co}.</li><li>An admin may reject or cancel a request, for example if stock is not available.</li></ul>
+<h3>Reviews</h3><p>Write only honest reviews of products you received. Do not post abuse, personal data or anything unlawful. We may remove reviews that break these rules.</p>
+<h3>Content and images</h3><p>Product photos and text belong to ${co} or its licensors. Admins must only upload images they own or have permission to use.</p>
+<h3>Proper use</h3><p>Do not try to break, overload or bypass the security of the portal, or to see other people's data.</p>
+<h3>Liability</h3><p>We work to keep the portal accurate and available but cannot promise it will always be error-free. To the extent the law allows, we are not liable for indirect losses from using it.</p>
+<h3>Law</h3><p>These terms are governed by ${law}. Questions: ${mail}.</p>`],
+cookies:["Cookie Policy",`<p>This portal does not use advertising or tracking cookies. It keeps a few small items on your device that it needs to work (called local storage).</p>
+<ul><li>Login session (set by Supabase): keeps you signed in.</li><li>wf_cart_…: your order basket.</li><li>wf_fav_…: your saved items.</li><li>wf_loc: your delivery location.</li><li>wf_theme: light or dark display.</li><li>wf_notice: remembers that you have seen the storage notice.</li></ul>
+<p>You can clear these any time in your browser settings. Signing out removes your login session, and clearing site data also removes your basket and saved items.</p><p>When the page loads, services such as Google Fonts and the CDNs listed in the Privacy Policy receive your IP address.</p>`],
+returns:["Cancellations &amp; returns",`<p>No payment is taken in this portal, so there are no online refunds here.</p>
+<ul><li>You can cancel a request yourself while its status is Pending. The items go back into stock.</li><li>After a request is Approved or Dispatched, contact ${mail} to cancel or return items.</li><li>Refunds, credit notes or replacements for paid orders follow the invoice or agreement you have with ${co}.</li></ul>`]};
+function openLegal(k){const L=LEGAL[k];if(!L)return;remember();$("#lBody").innerHTML=`<h2 id="lTitle" class="display font-extrabold">${L[0]}</h2><p class="text-black/60">Last updated: October 2026</p>${L[1]}`;$("#lModal").classList.replace("hidden","flex");$("#lModal .card").scrollTop=0;setTimeout(()=>$("#lClose").focus(),60)}
+const closeLegal=()=>{if($("#lModal").classList.contains("hidden"))return;$("#lModal").classList.replace("flex","hidden");restore()};
+document.addEventListener("click",e=>{const l=e.target.closest("[data-legal]");if(l){e.preventDefault();openLegal(l.dataset.legal)}});
+$("#lClose").onclick=closeLegal;$("#lModal").addEventListener("click",e=>{if(e.target.id==="lModal")closeLegal()});
+if(!ls.get("wf_notice",false))$("#cookieBar").classList.remove("hidden");
+$("#cookieOk").onclick=()=>{ls.set("wf_notice",true);$("#cookieBar").classList.add("hidden")};
+$("#skipBtn").onclick=()=>$("#view").focus();
+$("#drawer").inert=true;
+addEventListener("keydown",e=>{
+  if(e.key==="Escape"){closeLegal();if(!$("#nModal").classList.contains("hidden")){$("#nModal").classList.replace("flex","hidden");restore()}}
+  if(e.key!=="Tab")return;
+  const dlg=["#lModal .card","#pBody","#locModal .card","#nModal .card","#drawer"].map(x=>document.querySelector(x)).find(x=>x&&!x.closest(".hidden")&&!x.closest(".translate-x-full"));
+  if(!dlg)return;
+  const f=[...dlg.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled&&x.offsetParent!==null);
+  if(!f.length)return;const first=f[0],last=f[f.length-1];
+  if(!dlg.contains(document.activeElement)){e.preventDefault();first.focus()}
+  else if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}});
+$("#bellBtn").addEventListener("click",remember);
+
+// ---------- start ----------
+authMode("in");
+if(!sb){show("auth");$("#aErr").textContent="Setup needed: add your Supabase URL and key in config.js (see setup steps)."}
+else sb.auth.getSession().then(({data})=>enter(data.session)).catch(()=>show("auth"));
+</script>
+</body>
+</html>
