@@ -2,6 +2,7 @@
 // environment variables, it writes public/config.js from them. Otherwise it keeps config.js as is.
 const fs = require("fs"), path = require("path");
 const E = process.env, out = path.join(__dirname, "public", "config.js");
+fs.mkdirSync(path.join(__dirname, "public"), { recursive: true });
 const map = { url:"SUPABASE_URL", key:"SUPABASE_ANON_KEY", logo:"LOGO_URL", brand:"BRAND_COLOR", company:"COMPANY_NAME",
   contactEmail:"CONTACT_EMAIL", address:"COMPANY_ADDRESS", grievance:"GRIEVANCE_CONTACT", law:"GOVERNING_LAW" };
 if (!E.SUPABASE_URL || !E.SUPABASE_ANON_KEY) {
