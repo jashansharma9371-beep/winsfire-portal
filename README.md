@@ -61,3 +61,4 @@ Reload, sign in, open **Admin**, add products and approve your staff.
 - Edit settings later by changing Environment Variables in Vercel and redeploying.
 - The page loads Tailwind from a CDN, so it works with no build step. For maximum speed later, switch to a compiled Tailwind stylesheet.
 - Legal pages are templates. Have them checked against your local laws.
+`fix deploy 404
